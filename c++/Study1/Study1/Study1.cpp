@@ -157,6 +157,9 @@ void LvalueRvalue()
 	CTest test;
 	CTest& test1 = test;
 	//CTest&& test2 = test; // error r-value가 아님​
+	//CTest&& test2 = test; // error r-value가 아님​
+	//CTest&& test2 = test; // error r-value가 아님​
+	//CTest&& test2 = test; // error r-value가 아님​
 }
 
 int main()
