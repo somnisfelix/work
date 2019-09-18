@@ -248,8 +248,8 @@ int main()
 	
 	//LvalueRvalue();
 	//NewArrayTest();
-	//LamdaTest();
-	NewPtr();
+	LamdaTest();
+	//NewPtr();
 	
 }
 
