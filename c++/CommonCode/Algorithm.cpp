@@ -1,4 +1,7 @@
+
+#include <string>
 #include <iostream>
+#include <math.h>
 #include "Algorithm.h"
 using namespace std;
 
@@ -51,4 +54,39 @@ void CAlgorithm::Dojang2()
 		}
 	}
 	cout << "sum : " << sum << endl;
+}
+
+int CAlgorithm::PowCount(int num)
+{
+	cout << num << " : ";
+
+	int count = 0;
+	while (true)
+	{
+		float fSqrt = sqrtf((float)num);
+		float fTemp = (int)fSqrt;
+		if (fSqrt - fTemp != 0.0f || num == fSqrt)
+		{
+
+			cout << num << "(" << count << ")" << endl;
+			break;
+		}
+		count++;
+
+		num = fSqrt;
+	}
+
+
+	return 0;
+}
+
+void CAlgorithm::Dojang3()
+{
+	PowCount(1);
+	PowCount(15);
+	PowCount(16);
+	PowCount(49);
+	PowCount(64);
+	PowCount(100);
+	PowCount(256);
 }

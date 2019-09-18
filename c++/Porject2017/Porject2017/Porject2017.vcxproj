@@ -121,12 +121,14 @@
     <ClInclude Include="..\..\CommonCode\Algorithm.h" />
     <ClInclude Include="..\..\CommonCode\CObject.h" />
     <ClInclude Include="..\..\CommonCode\CTest1.h" />
+    <ClInclude Include="..\..\CommonCode\Link.h" />
     <ClInclude Include="..\..\CommonCode\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\CommonCode\Algorithm.cpp" />
     <ClCompile Include="..\..\CommonCode\CObject.cpp" />
     <ClCompile Include="..\..\CommonCode\CTest1.cpp" />
+    <ClCompile Include="..\..\CommonCode\Link.cpp" />
     <ClCompile Include="..\..\CommonCode\main.cpp" />
     <ClCompile Include="..\..\CommonCode\pch.cpp" />
   </ItemGroup>

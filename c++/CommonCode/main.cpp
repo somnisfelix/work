@@ -11,6 +11,8 @@
 #include <iostream>
 #include <memory>
 #include "CObject.h"
+#include "Algorithm.h"
+#include "Link.h"
 
 #ifdef _DEBUG
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -240,17 +242,41 @@ void NewPtr()
 
 }
 
+void LinkedList()
+{
+	CLink link;
+	for (int i = 0; i < 10; i++)
+	{
+		link.PushBack(i);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (i % 3 == 0)
+			link.Remove(i);
+	}
+	CNode *pCur = link.GetFirst();
+	while (pCur != nullptr)
+	{
+		cout << pCur->GetValue() << endl;
+		pCur = pCur->GetNext();
+	}
+	link.Clear();
+}
 
 int main()
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_CrtDumpMemoryLeaks();
+
 	
 	//LvalueRvalue();
 	//NewArrayTest();
-	LamdaTest();
+	//LamdaTest();
 	//NewPtr();
+ 	CAlgorithm algo;
+ 	algo.Dojang3();
 	
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtDumpMemoryLeaks();
 }
 
 
