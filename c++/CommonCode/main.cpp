@@ -3,12 +3,15 @@
 
 #include "pch.h"
 #include <string>
-#include <iostream>
 #include <crtdbg.h>
 #include <vector>
 #include <list>
+#include <array>
 #include <map>
+#include <iostream>
+#include <memory>
 #include "CObject.h"
+
 #ifdef _DEBUG
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
 // Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
@@ -79,58 +82,6 @@ void Test3()
 	cout << "p  : " << *p << " 주소 : " << p << endl;
 }
 
-void Dojang1()
-{
-	int sum = 0;
-	for (int i = 1; i < 1000; i++)
-	{
-		if (i % 3 == 0 || i % 5 == 0)
-		{
-			sum += i;
-		}
-	}
-	cout << sum << endl;
-}
-
-
-int GetGenerator(int number)
-{
-	int sum = number;
-	while (number != 0)
-	{
-		sum += number % 10;
-		number /= 10;
-	}
-	return sum;
-}
-
-#define MAX_NUMBER 5000
-void Dojang2()
-{
-	bool result[MAX_NUMBER] = { false };
-	for (int i = 1; i < MAX_NUMBER; i++)
-	{
-		int generator = GetGenerator(i);
-		if (generator < MAX_NUMBER)
-		{
-			result[generator] = true;
-		}
-		else {
-			break;
-		}
-	}
-	int sum = 0;
-	for (int i = 0; i < MAX_NUMBER; i++)
-	{
-		if (result[i] == false)
-		{
-			sum += i;
-		}
-	}
-	cout << "sum : " << sum << endl;
-}
-
-
 class CTest
 {
 private:
@@ -152,6 +103,14 @@ public:
 	CTest()
 	{
 	}
+
+	void Num2X()
+	{
+		auto fp = [this]() -> int { return num * 2; };
+		cout << fp() << endl;
+	}
+
+	
 };
 
 
@@ -168,7 +127,8 @@ void NewFor()
 	vector<int> vecTest{ 0,1,2,3,4,5 };
 	for (auto i : vecTest)
 	{
-		cout << i << endl;
+		//cout << i << endl;
+		i += 1;
 	}
 
 	map<int, int> mapTest{ { 0,10 },{ 1,11 },{ 2,22 },{ 3,33 } };
@@ -187,6 +147,16 @@ void NewFor()
 	CTest test[] = { { 0,"a" },{ 1,"b" },{ 2,"c" } };
 }
 
+void ForwardTest(const CTest& test)
+{
+	cout << "Call const CTest&" << endl;
+}
+
+void ForwardTest(CTest&& test)
+{
+	cout << "Call CTest&&" << endl;
+}
+
 
 void LvalueRvalue()
 {
@@ -197,22 +167,90 @@ void LvalueRvalue()
 	int &&c = 10; // c가 l-value가 된다.
 	int &d = c; // 가능
 	int &&e = std::move(a); // a를 r-value로 바꿈
+	int &&f = std::forward<int>(a); // a를 r-value로 바꿈
 
 	CTest test;
 	CTest& test1 = test;
+
+	ForwardTest(test);						 // Call const CTest&
+	ForwardTest(std::forward<CTest>(test));  // Call Ctest&&
+	ForwardTest(std::move(test));			 // Call Ctest&&
 	//CTest&& test2 = test; // error r-value가 아님​
 	//CTest&& test2 = test; // error r-value가 아님​
 	//CTest&& test2 = test; // error r-value가 아님​
 	//CTest&& test2 = test; // error r-value가 아님​
 }
 
+void NewArrayTest()
+{
+	std::array<int, 5> arr = { 1 };
+	arr.fill(3);
+	for (auto i : arr)
+	{
+		cout << i << endl;
+	}
+}
+
+// int AddFunc(int a, int b);
+typedef int(*AddFunc) (int, int);
+int CallAdd(AddFunc func, int a, int b)
+{
+	return func(a, b);
+}
+
+int Add(int a, int b)
+{
+	return a + b;
+}
+
+void LamdaTest()
+{
+	int a = CallAdd(Add, 20, 20);
+	// [캡쳐] (매개변수1, 매개변수2...) 반환타입 {내부구현}
+	int b = CallAdd([](int a, int b) -> int 
+	{ 
+		return a + b; 
+	}, 10, 20);
+
+	auto fp = []() -> int { return 100; };
+	int c = fp();
+
+	auto fp2 = [a, b, c]() -> int { return a+b+c; };
+	int d = fp2();
+
+	auto fp3 = [a, b, c]() -> void { cout << a << b << c << endl; };
+	fp3();
+
+	CTest test = CTest(100, "ff");
+	test.Num2X();
+}
+
+void NewPtr()
+{
+	unique_ptr<int> p1(new int(4));	
+	unique_ptr<int> p2 = move(p1); // p1은 empty 메모리가 p2에 이동
+
+	shared_ptr<int> p3(new int(4));
+	shared_ptr<int> p4 = p3; // p3 메모리가 p4에 복사됨
+	*p4 = 5;
+
+	shared_ptr<int> p5(new int(4));
+	weak_ptr<int> p6 = p5; // p5 메모리가 p6에 새로 생성되어 복사됨
+	p6.reset(); // p6만 empty
+
+}
+
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtDumpMemoryLeaks();
 	
-
-	Test3();
+	//LvalueRvalue();
+	//NewArrayTest();
+	//LamdaTest();
+	NewPtr();
+	
 }
 
 
