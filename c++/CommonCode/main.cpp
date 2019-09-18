@@ -2,10 +2,12 @@
 //
 
 #include "pch.h"
+#include <string>
 #include <iostream>
 #include <crtdbg.h>
 #include <vector>
 #include <list>
+#include <map>
 #include "CObject.h"
 #ifdef _DEBUG
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -128,21 +130,63 @@ void Dojang2()
 	cout << "sum : " << sum << endl;
 }
 
+
+class CTest
+{
+private:
+	int num;
+	string name;
+
+public:
+	decltype(num) GetNumber() {
+		return num;
+	}
+	string GetName() {
+		return name;
+	}
+	CTest(int _num, const string &_name)
+		: num(_num)
+		, name(_name)
+	{
+	}
+	CTest()
+	{
+	}
+};
+
+
+
+void func(CTest test)
+{
+	string str = test.GetName();
+	cout << str << " :: " << test.GetNumber() << endl;
+}
+
+
 void NewFor()
 {
-	int test[] = { 1,2,3,4 };
-	decltype(test) test2 = { 1,2,3,4 };
-	vector<int> vecTest = { 1,2,3,4,5 };
-	//auto iter = vecTest.begin();
+	vector<int> vecTest{ 0,1,2,3,4,5 };
 	for (auto i : vecTest)
 	{
 		cout << i << endl;
 	}
+
+	map<int, int> mapTest{ { 0,10 },{ 1,11 },{ 2,22 },{ 3,33 } };
+	for (auto i : mapTest)
+	{
+		cout << i.first << " :: " << i.second << endl;
+	}
+
+	vector<CTest> vecCTest{ { 0,"a" },{ 1,"b" },{ 2,"c" } };
+	for (auto i : vecCTest)
+	{
+		cout << i.GetName() << i.GetNumber() << endl;
+	}
+
+
+	CTest test[] = { { 0,"a" },{ 1,"b" },{ 2,"c" } };
 }
 
-class CTest
-{
-};
 
 void LvalueRvalue()
 {
