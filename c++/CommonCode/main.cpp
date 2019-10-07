@@ -14,6 +14,7 @@
 #include "Algorithm.h"
 #include "Link.h"
 #include "CLearn.h"
+#include "Sort.h"
 
 #ifdef _DEBUG
 #define new new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -116,10 +117,12 @@ int main()
 	//LamdaTest();
 	//NewPtr();
  	/*CAlgorithm algo;
- 	algo.Dojang3();*/
+	algo.Main();*/
 
 	CCLearn clearn;
 	clearn.Main();
+	/*CSort sort;
+	sort.Main();*/
 	
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtDumpMemoryLeaks();

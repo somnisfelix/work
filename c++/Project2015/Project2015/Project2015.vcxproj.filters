@@ -33,6 +33,9 @@
     <ClCompile Include="..\..\CommonCode\CLearn.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\CommonCode\Sort.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\CommonCode\CObject.h">
@@ -48,6 +51,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="..\..\CommonCode\CLearn.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonCode\Sort.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

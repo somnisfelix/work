@@ -168,18 +168,178 @@ T Add(T a, string b)
 	return a ;
 }
 
-	
+void CCLearn::ConstCast()
+{
+	const int *pConstNum = new int(10);
+	// 에러!!
+	// int *pInt = pConstNum;
+	int *pInt = const_cast<int*>(pConstNum);
+	*pInt = 200;
+
+	delete pConstNum;
+}
+
+void CCLearn::DynamicCast()
+{
+	class A
+	{
+	public:
+		virtual void AAA() {
+			cout << "AAA" << endl;
+		};
+	};
+
+	class B : public A
+	{
+	public:
+		void AAA() {
+			cout << "BBB" << endl;
+		};
+	};
+
+	A *pA = new A();
+	// pB2가 NULL임
+	B *pB2 = dynamic_cast<B*>(pA);
+
+	A *pAB = new B();
+	B *pB3 = dynamic_cast<B*>(pAB);
+
+	pA->AAA();
+	pB3->AAA();
+
+	delete pA;
+	delete pAB;
+}
+
+void CCLearn::StaticCast()
+{
+	class A
+	{
+	public:
+		virtual void AAA() {
+			cout << "AAA" << endl;
+		};
+	};
+
+	class B : public A
+	{
+	public:
+		void AAA() {
+			cout << "BBB" << endl;
+		};
+	};
+
+	A *pA = new A();
+	// pB2가 casting 됨
+	B *pB2 = static_cast<B*>(pA);
+	// 둘다 AAA가 출력
+	pA->AAA();
+	pB2->AAA();
+
+	A *pAB = new B();
+	B *pB3 = static_cast<B*>(pAB);
+	// 둘다 BBB가 출력
+	pAB->AAA();
+	pB3->AAA();
+	delete pA;
+	delete pAB;
+
+	int i = 0;
+	float j = 30.0f;
+	// 경고 발생
+	//i = j;
+	i = static_cast<int>(j);
+
+	void *v = &i;
+	// 캐스팅이 가능
+	//int *k = static_cast<int *>(v);
+	int *k = (int *)(v);
+}
+
+void CCLearn::AutoPtr()
+{
+	{
+		// 메모리 사용후 자동으로 제거함
+		std::auto_ptr<CTest> pTest(new CTest(20, "test"));
+		// pTest는 null
+		std::auto_ptr<CTest> pTest2 = pTest;
+		// 메모리 해제 굳이 하지 않아도 됨
+		pTest2.reset();
+	}
+
+	{
+		// 포인터의 이동이 불가능하고 std::move함수를 통해 이동이 가능하다.
+		// const를 붙이면 std::move를 통해서도 이동이 불가능하다.
+		std::unique_ptr<CTest> pTest(new CTest(20, "test"));
+		// 에러!!
+		// std::unique_ptr<CTest> pTest2 = pTest;
+		// pTest는 null
+		std::unique_ptr<CTest> pTest2 = std::move(pTest);
+		pTest2.reset();
+	}
+
+	{
+
+		// 포인터의 공유가 가능하고 공유객체가 늘어날수록 레퍼런스 카운트가 증가한다.
+		std::shared_ptr<CTest> pTest(new CTest(20, "test"));
+		// use_count = 1;
+		cout << pTest.use_count() << endl;
+		// pTest가 null이 되지 않음
+		std::shared_ptr<CTest> pTest2 = pTest;
+		// use_count = 2;
+		cout << pTest.use_count() << endl;
+		// use_count = 1;
+		pTest2.reset();
+		// use_count = 0;
+		pTest.reset();
+
+
+		// 배열 생성이 가능하지만 .reset을 통해 delete[]가 호출되지 않는다.
+		/*std::shared_ptr<CTest> pTest3(new CTest[20]);
+		// 에러!!
+		pTest3.reset();
+
+		// 소멸할때 사용할 함수를 미리 정의하면 제대로 삭제됨
+		std::shared_ptr<CTest> pTest3(new CTest[20], [](CTest *pTest)
+		{
+			delete[] pTest;
+		});*/
+	}
+	// shared_ptr 레퍼런스 카운팅 방식의 잠재적인 위험 가운데 하나로 서로를 참조하는 순환참조 문제가 있다. 
+	// A는 B를 가리키고, B는 다시 A를 가리키는 상황이 바로 순환참조 상황이다. 이런 상황에서는 순환참조에 
+	// 참여하는 모든 인스턴스가 삭제될 수 없으며, 이는 곧장 메모리 누수로 이어진다. 
+	// shared_ptr이 자신을 제외하고 하나라도 남아 있으면, 아무리 삭제 명령을 내려도 해당 메모리가 삭제되지 않지만 
+	// 해당 메모리를 가리키는 포인터 타입이 shared_ptr이 아닌, weak_ptr 이라면 해당 메모리는 삭제될수 있다
+	{
+		std::shared_ptr<int> sp1(new int(5)); // create, ref = 1
+		std::weak_ptr<int> wp1 = sp1;   // ref = 1
+		{
+			// sp1은 wp1으로 sp2를 복사
+			std::shared_ptr<int> sp2 = wp1.lock();  // ref = 2
+
+			if (sp2) {
+				std::cout << "sp2 has copy of sp1" << std::endl; // 
+			}
+		} // sp2는 이곳에서 자동으로 파괴됨, ref = 1
+
+		sp1.reset(); // sp1은 이곳에서 파괴됨, ref = 0, sp1은 null
+	}
+}
 
 void CCLearn::Main()
 {
 	//LamdaTest();
 
-	CTemplate<int> temp = CTemplate<int>(10, 20);
+	/*CTemplate<int> temp = CTemplate<int>(10, 20);
 	int n = temp.Add();
 
 	int add = Add<int>(20, 30);
 	float add2 = Add<float>(10.0f, 20.0f);
-	int add3 = Add<int>(20,"tt");
+	int add3 = Add<int>(20,"tt");*/
+	//ConstCast();
+	//DynamicCast();
+	//StaticCast();
+	AutoPtr();
 	
 }
 

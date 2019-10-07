@@ -148,6 +148,7 @@
     <ClCompile Include="..\..\CommonCode\Link.cpp" />
     <ClCompile Include="..\..\CommonCode\main.cpp" />
     <ClCompile Include="..\..\CommonCode\pch.cpp" />
+    <ClCompile Include="..\..\CommonCode\Sort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\CommonCode\Algorithm.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="..\..\CommonCode\CObject.h" />
     <ClInclude Include="..\..\CommonCode\Link.h" />
     <ClInclude Include="..\..\CommonCode\pch.h" />
+    <ClInclude Include="..\..\CommonCode\Sort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

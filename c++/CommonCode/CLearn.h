@@ -8,6 +8,12 @@ public:
 	~CCLearn();
 
 	void Main();
+
+private:
+	void ConstCast();
+	void DynamicCast();
+	void StaticCast();
+	void AutoPtr();
 };
 
 class CTest
